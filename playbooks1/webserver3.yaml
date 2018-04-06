@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    package_name: apache2
+  tasks:
+  - name: "install webserver"
+    package:
+      name: "{{package_name}}"
+      state: present 
+  - name: "update package"
+    apt:
+      update_cache: yes
+    when: ansible_os_family == "Debian"
+  - name: "install utilities"
+    package: 
+      name: "{{item}}"
+      state: present
+      with_items: utilities
+      when: ansible_os_family == "Debian" 
